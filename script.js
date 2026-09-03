@@ -1,120 +1,172 @@
-// 1. CURSOR, FOCO DE LUZ Y FONDO
-const cursor = document.querySelector('.cursor');
-const spotlight = document.querySelector('.spotlight');
-const woolTexture = document.querySelector('.wool-texture');
-let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0, spotX = 0, spotY = 0;
+// 1. EL CURSOR
+const follower = document.getElementById('follower');
+document.addEventListener('mousemove', (e) => {
+    follower.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+});
+
+// 2. EL ELEMENTO QUE ESCAPA (BOTÓN CENTRAL)
+const escaper = document.getElementById('escaper');
+document.addEventListener('mousemove', (e) => {
+    const rect = escaper.getBoundingClientRect();
+    const escaperX = rect.left + rect.width / 2;
+    const escaperY = rect.top + rect.height / 2;
+    const dist = Math.hypot(e.clientX - escaperX, e.clientY - escaperY);
+    
+    if (dist < 150) { 
+        const pushX = (escaperX - e.clientX) * 1.5;
+        const pushY = (escaperY - e.clientY) * 1.5;
+        let newX = Math.max(0, Math.min(window.innerWidth - rect.width, rect.left + pushX));
+        let newY = Math.max(0, Math.min(window.innerHeight - rect.height, rect.top + pushY));
+        
+        escaper.style.left = newX + 'px';
+        escaper.style.top = newY + 'px';
+    }
+});
+
+// 3. TELETRANSPORTE DE LOS POP-UPS 
+const spam1 = document.getElementById('spam1');
+const spam2 = document.getElementById('spam2');
+const btnIgnorar = document.getElementById('btn-ignorar');
+const btnReclamar = document.getElementById('btn-reclamar');
+
+function teleportSpam(element) {
+    const randomX = Math.random() * (window.innerWidth - 320);
+    const randomY = Math.random() * (window.innerHeight - 250);
+    element.style.bottom = 'auto'; element.style.right = 'auto';
+    element.style.top = `${randomY}px`; element.style.left = `${randomX}px`;
+
+    const randomColor1 = `hsl(${Math.random() * 360}, 100%, 50%)`;
+    const randomColor2 = `hsl(${Math.random() * 360}, 100%, 50%)`;
+    element.style.borderColor = randomColor1;
+    element.style.boxShadow = `10px 10px 0px ${randomColor2}`;
+    
+    const header = element.querySelector('.spam-header');
+    header.style.backgroundColor = randomColor1;
+}
+
+btnIgnorar.addEventListener('click', () => teleportSpam(spam1));
+btnReclamar.addEventListener('click', () => teleportSpam(spam2));
+
+// 4. MÚLTIPLES LOGOS REBOTANDO
+const bouncers = document.querySelectorAll('.bouncer');
+const bouncerData = Array.from(bouncers).map(el => {
+    return {
+        el: el, x: Math.random() * (window.innerWidth - 150), y: Math.random() * (window.innerHeight - 100),
+        vx: (Math.random() > 0.5 ? 1 : -1) * (3 + Math.random() * 4), vy: (Math.random() > 0.5 ? 1 : -1) * (3 + Math.random() * 4)
+    };
+});
+
+function animateBouncers() {
+    bouncerData.forEach(b => {
+        const rect = b.el.getBoundingClientRect();
+        if (b.x + rect.width >= window.innerWidth || b.x <= 0) b.vx = -b.vx;
+        if (b.y + rect.height >= window.innerHeight || b.y <= 0) b.vy = -b.vy;
+        b.x += b.vx; b.y += b.vy; b.el.style.transform = `translate(${b.x}px, ${b.y}px)`;
+    });
+    requestAnimationFrame(animateBouncers);
+}
+animateBouncers();
+
+// 5. CHISPAS MULTICOLOR EN EL CANVAS
+const canvas = document.getElementById('sparks');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+let particles = [];
 
 document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-
-    if(woolTexture) {
-        // Movimiento muy sutil y suave de la textura
-        const tx = (window.innerWidth / 2 - mouseX) * 0.005;
-        const ty = (window.innerHeight / 2 - mouseY) * 0.005;
-        woolTexture.style.transform = `translate(${tx}px, ${ty}px)`;
+    for(let i = 0; i < 4; i++){ 
+        particles.push({
+            x: e.clientX, y: e.clientY, vx: (Math.random() - 0.5) * 15, vy: (Math.random() - 0.5) * 15,
+            life: 1, color: `hsl(${Math.random() * 360}, 100%, 60%)` 
+        });
     }
 });
 
-function animateInteractions() {
-    // Inercia para el cursor (rápido)
-    cursorX += (mouseX - cursorX) * 0.2;
-    cursorY += (mouseY - cursorY) * 0.2;
-    
-    // Inercia para el foco de luz (lento y difuso)
-    spotX += (mouseX - spotX) * 0.08;
-    spotY += (mouseY - spotY) * 0.08;
-
-    if (cursor) {
-        cursor.style.left = cursorX + 'px';
-        cursor.style.top = cursorY + 'px';
-    }
-    if (spotlight) {
-        spotlight.style.left = spotX + 'px';
-        spotlight.style.top = spotY + 'px';
-    }
-    
-    requestAnimationFrame(animateInteractions);
+function animateSparks() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach((p, index) => {
+        p.x += p.vx; p.y += p.vy; p.life -= 0.03; 
+        ctx.fillStyle = p.color; ctx.globalAlpha = Math.max(0, p.life); ctx.fillRect(p.x, p.y, 4, 4);
+        if (p.life <= 0) particles.splice(index, 1);
+    });
+    requestAnimationFrame(animateSparks);
 }
-animateInteractions();
+animateSparks();
 
-// Efecto magnético del cursor en enlaces
-const hoverElements = document.querySelectorAll('a');
-hoverElements.forEach(el => {
-    el.addEventListener('mouseenter', () => {
-        cursor.style.width = '40px';
-        cursor.style.height = '40px';
-        cursor.style.backgroundColor = 'transparent';
-        cursor.style.border = '1px solid var(--text-color)';
-    });
-    el.addEventListener('mouseleave', () => {
-        cursor.style.width = '15px';
-        cursor.style.height = '15px';
-        cursor.style.backgroundColor = 'var(--text-color)';
-        cursor.style.border = 'none';
-    });
+// 6. PARALLAX EXTREMO EN LAS FOTOS
+const f1 = document.getElementById('float1');
+const f2 = document.getElementById('float2');
+document.addEventListener('mousemove', (e) => {
+    const x = (window.innerWidth / 2 - e.clientX) / 10;
+    const y = (window.innerHeight / 2 - e.clientY) / 10;
+    f1.style.transform = `translate(${x}px, ${y}px) rotate(${x/10}deg)`;
+    f2.style.transform = `translate(${-x}px, ${-y}px) rotate(${-x/10}deg)`;
 });
 
-// 2. EFECTO HOVER 3D (BALANCEO SUAVE EN LAS TARJETAS)
-const cards = document.querySelectorAll('.card');
-cards.forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left; // Posición X dentro de la tarjeta
-        const y = e.clientY - rect.top;  // Posición Y dentro de la tarjeta
-        
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        // Calcular rotación (máximo 4 grados para que sea muy elegante)
-        const rotateX = ((y - centerY) / centerY) * -4; 
-        const rotateY = ((x - centerX) / centerX) * 4;
+window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
 
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-    });
+
+// =========================================================
+// 7. MECÁNICA: LA FLASHBANG DE LA MUERTE
+// =========================================================
+const eventoFlashbang = document.getElementById('evento-flashbang');
+const bocadilloFlash = document.getElementById('bocadillo-flashbang');
+const btnDesactivar = document.getElementById('btn-desactivar');
+const pantallaBlanca = document.getElementById('pantalla-blanca');
+
+let temporizadorBomba;
+
+function programarAtaque() {
+    // ⚠️ MODO DE PRUEBA: Aparece aleatoriamente entre 10 y 15 segundos.
+    const tiempoAleatorio = Math.random() * (15000 - 10000) + 10000;
     
-    card.addEventListener('mouseleave', () => {
-        // Al salir el ratón, vuelve a su posición original suavemente
-        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-    });
+    // ⚠️ PARA EL MODO FINAL (De 2 a 5 minutos): 
+    // BORRA LA LÍNEA DE ARRIBA Y DESCOMENTA LA DE ABAJO:
+    // const tiempoAleatorio = Math.random() * (300000 - 120000) + 120000;
+
+    setTimeout(mostrarAmenaza, tiempoAleatorio);
+}
+
+function mostrarAmenaza() {
+    // 1. Mostrar tu foto con el botón
+    eventoFlashbang.classList.remove('oculto');
+    bocadilloFlash.classList.add('oculto');
+
+    // 2. Iniciar cuenta atrás de 5 segundos
+    temporizadorBomba = setTimeout(detonarFlashbang, 5000);
+}
+
+// Si el usuario es rápido y pulsa DESACTIVAR:
+btnDesactivar.addEventListener('click', () => {
+    clearTimeout(temporizadorBomba);       // Paramos la bomba
+    eventoFlashbang.classList.add('oculto'); // Ocultamos tu foto
+    programarAtaque();                     // Reprogramamos el siguiente ataque
 });
 
-// 3. ANIMACIÓN DE APARICIÓN AL HACER SCROLL
-const fadeElements = document.querySelectorAll('.fade-scroll');
-const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-        }
-    });
-}, { root: null, threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+// Si pasan los 5 segundos sin pulsar:
+function detonarFlashbang() {
+    // Aparece el bocadillo de cómic
+    bocadilloFlash.classList.remove('oculto');
 
-fadeElements.forEach(el => observer.observe(el));
-
-// 4. CARRUSELES CROSSFADE (FUNDIDO CRUZADO CON TIEMPOS DE 6 A 15 SEGUNDOS)
-const carousels = document.querySelectorAll('.carousel');
-
-carousels.forEach(carousel => {
-    const images = carousel.querySelectorAll('.project-img');
-    let currentIndex = 0;
-
-    // Generar un tiempo aleatorio único (entre 6000ms y 15000ms)
-    const randomInterval = Math.floor(Math.random() * (15000 - 6000 + 1)) + 6000;
-
-    function moveCarousel() {
-        // Quitar la clase active a la imagen actual
-        images[currentIndex].classList.remove('active');
+    // Esperamos medio segundo para que lean "¡¡FLASHBANG!!" y sufran
+    setTimeout(() => {
+        // Ceguera instantánea (quitamos transición para que sea de golpe)
+        pantallaBlanca.style.transition = 'none';
+        pantallaBlanca.style.opacity = '1';
         
-        currentIndex++;
-        if (currentIndex >= images.length) {
-            currentIndex = 0; // Vuelve a la primera imagen
-        }
-        
-        // Poner la clase active a la nueva imagen
-        images[currentIndex].classList.add('active');
-    }
+        // Escondemos tu foto y el botón por detrás del blanco
+        eventoFlashbang.classList.add('oculto');
 
-    // Iniciar el fundido cruzado automático
-    setInterval(moveCarousel, randomInterval);
-});
+        // Tras 2 segundos de ceguera absoluta, difuminamos de vuelta a la normalidad
+        setTimeout(() => {
+            pantallaBlanca.style.transition = 'opacity 2s ease-out';
+            pantallaBlanca.style.opacity = '0';
+            
+            // Programar el siguiente ataque para cuando el usuario baje la guardia
+            programarAtaque();
+        }, 2000);
+    }, 500);
+}
+
+// Iniciar el ciclo de terror al cargar la web
+programarAtaque();

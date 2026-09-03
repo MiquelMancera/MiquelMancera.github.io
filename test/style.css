@@ -1,0 +1,191 @@
+:root {
+    --bg-color: #FAF9F6;
+    --accent-color: #E8E4DB;
+    --text-color: #2C2A28;
+    --highlight: #B3A394;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+h1, h2, h3, .logo { font-family: 'Playfair Display', serif; font-weight: 400; }
+
+
+html {
+    height: 100%;
+}
+
+body {
+    position: relative; /* Clave: punto de anclaje para la textura */
+    min-height: 100%;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Work Sans', sans-serif;
+    overflow-x: hidden;
+}
+
+/* 2. La textura anclada desde la parte superior absoluta hasta el fondo real *//* TEXTURA DE LANA INTERACTIVA EN EL FONDO */
+.wool-texture {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;             /* Al fijar top:0 y bottom:0 sobre body relativo, estira por todo el documento */
+    width: 100%;
+    min-height: 100%;
+    
+	background-image: url('body.jfif');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    
+    opacity: 0.12;
+    z-index: -5;
+    pointer-events: none;
+    filter: blur(2px);
+}
+
+
+
+/* FOCO DE LUZ Y CURSOR */
+.spotlight {
+    position: fixed; top: 0; left: 0; width: 700px; height: 700px; /* Un poco más grande para difuminar mejor */
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, transparent 60%);
+    border-radius: 50%; pointer-events: none; z-index: -2;
+    transform: translate(-50%, -50%); transition: opacity 0.5s; 
+    mix-blend-mode: soft-light; /* Clave: ilumina suavemente en vez de manchar */
+    filter: blur(30px); /* Difumina los bordes para que no se vea el círculo perfecto */
+}
+
+.cursor {
+    position: fixed; top: 0; left: 0; width: 15px; height: 15px;
+    background-color: var(--text-color); border-radius: 50%;
+    pointer-events: none; transform: translate(-50%, -50%);
+    transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1), height 0.4s cubic-bezier(0.23, 1, 0.32, 1), background-color 0.4s; z-index: 9999;
+}
+
+nav { display: flex; justify-content: space-between; padding: 2rem 5%; position: fixed; width: 100%; top: 0; z-index: 100; mix-blend-mode: difference; color: white; }
+nav .logo { color: white; font-size: 1.5rem; font-weight: 600; }
+nav ul { display: flex; list-style: none; gap: 2rem; }
+nav a { color: white; text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
+
+.hero { height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; padding: 0 5%; }
+.hero h1 { font-size: 5rem; margin-bottom: 1rem; color: var(--text-color); }
+.hero p { font-size: 1.2rem; color: var(--highlight); letter-spacing: 1px; }
+
+/* FORMAS ORGÁNICAS FLOTANTES QUE TE SIGUEN */
+@keyframes floatOrganico {
+    /* Usamos margin en lugar de transform para que el JS del ratón no lo anule */
+    0% { margin-top: 0; margin-left: 0; }
+    33% { margin-top: -40px; margin-left: 30px; }
+    66% { margin-top: 20px; margin-left: -20px; }
+    100% { margin-top: 0; margin-left: 0; }
+}
+
+.shape { 
+    position: fixed; /* Ahora bajarán contigo al hacer scroll */
+    border-radius: 50%; 
+    z-index: -3; 
+    filter: blur(60px); 
+    animation: floatOrganico 20s infinite ease-in-out; 
+    pointer-events: none; /* Evita que bloqueen clics */
+}
+
+.shape-1 { 
+    width: 500px; 
+    height: 500px; 
+    top: -10%; 
+    left: -5%; 
+    background-color: var(--accent-color); /* Arena clarito */
+}
+
+.shape-2 { 
+    width: 400px; 
+    height: 400px; 
+    bottom: -10%; 
+    right: -5%; 
+    background-color: var(--accent-color); /* Arena clarito */
+    animation-delay: -10s; 
+}
+
+.gallery { padding: 8rem 5%; }
+.gallery-header { text-align: center; margin-bottom: 5rem; }
+.gallery-header h2 { font-size: 3rem; margin-bottom: 1rem; }
+
+/* GRID SIMÉTRICO Y PROFUNDIDAD DE CAMPO (HOVER EFECT) */
+.grid { 
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3rem; 
+    perspective: 1000px; /* Para el balanceo 3D */
+}
+
+/* Efecto difuminado a los que NO tienen el ratón encima */
+.grid:hover .card:not(:hover) {
+    filter: blur(4px);
+    opacity: 0.6;
+}
+
+.card { 
+    text-align: center; display: flex; flex-direction: column; min-width: 0; 
+    transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1), filter 0.6s ease, opacity 0.6s ease;
+    transform-style: preserve-3d;
+}
+.card h3 { margin-top: 25px; font-size: 1.4rem; letter-spacing: 1px; }
+
+/* CARRUSEL CROSSFADE (FUNDIDO CRUZADO) */
+.carousel {
+    position: relative; width: 100%; height: 550px; overflow: hidden; border-radius: 2px;
+}
+
+.project-img {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%; object-fit: cover; object-position: center;
+    opacity: 0; 
+    /* Transición de opacidad progresiva y micro-zoom */
+    transition: opacity 1.5s ease-in-out, transform 8s ease-out; 
+    transform: scale(1);
+}
+
+.project-img.active {
+    opacity: 1;
+    z-index: 1;
+    transform: scale(1.04); /* La tela "respira" hacia la cámara lentamente */
+}
+
+.fade-scroll { opacity: 0; transform: translateY(40px); filter: blur(5px); transition: opacity 1s ease-out, transform 1s ease-out, filter 1s ease-out; }
+.fade-scroll.visible { opacity: 1; transform: translateY(0); filter: blur(0); }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .hero h1 { font-size: 3.5rem; }
+}
+@media (max-width: 850px) {
+    * { cursor: auto !important; } 
+    .cursor, .spotlight { display: none; }
+    
+    nav ul { gap: 1rem; } 
+    nav a { font-size: 0.7rem; }
+    
+    .hero h1 { font-size: 2.5rem; } 
+    .hero p { font-size: 1rem; }
+    
+    .grid { grid-template-columns: 1fr; gap: 3rem; }
+    .carousel { height: 450px; }
+    .grid:hover .card:not(:hover) { filter: none; opacity: 1; }
+
+    /* --- NUEVOS AJUSTES PARA MÓVIL --- */
+    
+	.shape-1 { 
+	    width: 250px; 
+		height: 250px; 
+         
+    }
+	
+    /* 1. Ocultamos la segunda forma orgánica */
+    .shape-2 { 
+        display: none; 
+    }
+    
+    /* 2. Suavizamos la textura de fondo para que no estorbe al leer */
+    .wool-texture { 
+        opacity: 0.50; /* Un pelín más transparente en móvil */
+    }
+}

@@ -3,75 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web porfolio diseño Paula Benitez</title>
+    <title>Miquel Mancera | Portfolio SPAM & Flashbang</title>
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Work+Sans:wght@300;400&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- TEXTURA DE LANA DE FONDO -->
-    <div class="wool-texture"></div>
 
-    <!-- FOCO DE LUZ Y CURSOR DINÁMICO -->
-    <div class="spotlight"></div>
-    <div class="cursor"></div>
-	
-<!-- FORMAS ORGÁNICAS (Ahora son globales) -->
-    <div class="shape shape-1"></div>
-    <div class="shape shape-2"></div>
-	
-    <nav>
-        <div class="logo">PB.</div>
-        <ul class="menu">
-            <li><a href="#proyectos">Colecciones</a></li>
-            <li><a href="#sobre-mi">El Taller</a></li>
-            <li><a href="#contacto">Contacto</a></li>
-        </ul>
-    </nav>
+    <!-- LA PANTALLA BLANCA DE LA MUERTE (Flashbang) -->
+    <div id="pantalla-blanca"></div>
 
-    <header class="hero" id="hero">
-        <div class="hero-content fade-scroll">
-            <h1>Hilos que cobran vida.</h1>
-            <p>Diseño de moda, tricot y exploración de texturas.</p>
+    <!-- EL EVENTO FLASHBANG (Tu foto, el bocadillo y el botón) -->
+    <div id="evento-flashbang" class="oculto">
+        <div id="bocadillo-flashbang" class="oculto">¡¡FLASHBANG!!</div>
+        <!-- Aquí irá tu PNG sin fondo tocando los huevos -->
+        <img src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?auto=format&fit=crop&w=300&q=80" alt="El Fisgón" id="foto-fisgon">
+        <button id="btn-desactivar">DESACTIVAR</button>
+    </div>
+
+    <!-- MARQUESINA DE SPAM ARCOÍRIS -->
+    <div class="marquee-container">
+        <marquee scrollamount="35">⚠️ ATENCIÓN: COMPRA AHORA - OFERTA LIMITADA - PIEZAS DE COMPETICIÓN JDM - DESCUENTO DEL 99% - SUSCRÍBETE ⚠️</marquee>
+    </div>
+
+    <!-- CAOS VISUAL -->
+    <div class="stars"></div>
+    <canvas id="sparks"></canvas>
+    
+    <!-- EL CURSOR -->
+    <div id="follower"></div>
+    
+    <!-- MÚLTIPLES LOGOS REBOTANDO -->
+    <img src="https://upload.wikimedia.org/wikipedia/commons/9/9b/DVD_logo.svg" class="bouncer logo-blanco" id="logo1" alt="DVD">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/Casio_logo.svg" class="bouncer logo-blanco" id="logo2" alt="Casio">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/f/f6/Blu-ray_Disc_logo.svg" class="bouncer" id="logo3" alt="Blu-ray">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/9/9d/Toyota_carlogo.svg" class="bouncer" id="logo4" alt="Toyota">
+
+    <!-- POP-UPS TROLL -->
+    <div class="spam popup1" id="spam1">
+        <div class="spam-header">🚨 ALERTA DEL SISTEMA 🚨</div>
+        <div class="spam-body">
+            ¡Tu Celica ST162 necesita aceite urgentemente!<br><br>
+            <button id="btn-ignorar">Ignorar</button>
         </div>
-    </header>
+    </div>
 
-    <section id="proyectos" class="gallery">
-        <div class="gallery-header fade-scroll">
-            <h2>Colecciones Destacadas</h2>
-            <p>El arte de tejer historias a través de las prendas.</p>
+    <div class="spam popup2" id="spam2">
+        <div class="spam-header">🎉 ¡ERES EL VISITANTE 1.000.000! 🎉</div>
+        <div class="spam-body">
+            ¡Has ganado un turbo nuevo para el Clio!<br><br>
+            <button id="btn-reclamar" style="animation: shake 0.2s infinite;">RECLAMAR PREMIO</button>
+        </div>
+    </div>
+
+    <!-- HEADER / HERO -->
+    <header class="diagonal-section hero">
+        <div class="content">
+            <h1 class="reflex">MIQUEL MANCERA</h1>
+            <h2 class="sub">Informático & Programador</h2>
         </div>
         
-        <div class="grid">
-            <!-- COLECCIÓN 1 -->
-            <div class="card fade-scroll">
-                <div class="carousel">
-                    <!-- Las imágenes ya no usan 'carousel-track' con flexbox, sino posición absoluta para el Fade -->
-                    <img src="https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?q=80&w=600&auto=format&fit=crop" alt="Moda tricot 1" class="project-img active">
-                    <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=600&auto=format&fit=crop" alt="Moda tricot 2" class="project-img">
-                    <img src="https://images.unsplash.com/photo-1551163943-3f6a855d1153?q=80&w=600&auto=format&fit=crop" alt="Moda tricot 3" class="project-img">
-                </div>
-                <h3>Invierno Orgánico</h3>
-            </div>
+        <img src="https://images.unsplash.com/photo-1542282088-fe8426682b8f" class="floating-img img-1 reflex" id="float1" alt="Coche 1">
+        <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d" class="floating-img img-2 reflex" id="float2" alt="Coche 2">
+        
+        <div id="escaper">¡INTENTA ATRAPARME!</div>
+    </header>
 
-            <!-- COLECCIÓN 2 -->
-            <div class="card fade-scroll">
-                <div class="carousel">
-                     <img src="https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?q=80&w=600&auto=format&fit=crop" alt="Moda tricot 1" class="project-img active">
-                    <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=600&auto=format&fit=crop" alt="Moda tricot 2" class="project-img">
-                    <img src="https://images.unsplash.com/photo-1551163943-3f6a855d1153?q=80&w=600&auto=format&fit=crop" alt="Moda tricot 3" class="project-img">
-                </div>
-                <h3>Texturas Crudas</h3>
-            </div>
-
-            <!-- COLECCIÓN 3 -->
-            <div class="card fade-scroll">
-                <div class="carousel">
-                    <img src="https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?q=80&w=600&auto=format&fit=crop" alt="Moda tricot 1" class="project-img active">
-                    <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=600&auto=format&fit=crop" alt="Moda tricot 2" class="project-img">
-                    <img src="https://images.unsplash.com/photo-1551163943-3f6a855d1153?q=80&w=600&auto=format&fit=crop" alt="Moda tricot 3" class="project-img">
-                </div>
-                <h3>Punto y Forma</h3>
-            </div>
+    <section class="diagonal-section projects">
+        <div class="content">
+            <h2 class="reflex">EL GARAJE</h2>
+            <br><br>
+            <h3 class="rojo-racing">CLIO MK1 - TRACK PREP</h3>
+            <p>El caos acaba de empezar. Cuidado donde haces click.</p>
         </div>
     </section>
 
