@@ -158,10 +158,34 @@ nav a { color: white; text-decoration: none; text-transform: uppercase; font-siz
     .hero h1 { font-size: 3.5rem; }
 }
 @media (max-width: 768px) {
-    * { cursor: auto !important; } .cursor, .spotlight { display: none; }
-    nav ul { gap: 1rem; } nav a { font-size: 0.7rem; }
-    .hero h1 { font-size: 2.5rem; } .hero p { font-size: 1rem; }
+    * { cursor: auto !important; } 
+    .cursor, .spotlight { display: none; }
+    
+    nav ul { gap: 1rem; } 
+    nav a { font-size: 0.7rem; }
+    
+    .hero h1 { font-size: 2.5rem; } 
+    .hero p { font-size: 1rem; }
+    
     .grid { grid-template-columns: 1fr; gap: 3rem; }
     .carousel { height: 450px; }
-    .grid:hover .card:not(:hover) { filter: none; opacity: 1; } /* Desactiva el desenfoque en móvil */
+    .grid:hover .card:not(:hover) { filter: none; opacity: 1; }
+
+    /* --- NUEVOS AJUSTES PARA MÓVIL --- */
+    
+	.shape-1 { 
+	    width: 250px; 
+		height: 250px; 
+         
+    }
+	
+    /* 1. Ocultamos la segunda forma orgánica */
+    .shape-2 { 
+        display: none; 
+    }
+    
+    /* 2. Suavizamos la textura de fondo para que no estorbe al leer */
+    .wool-texture { 
+        opacity: 0.50; /* Un pelín más transparente en móvil */
+    }
 }
