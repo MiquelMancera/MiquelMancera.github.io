@@ -64,7 +64,7 @@ carousels.forEach(carousel => {
     let currentIndex = 0;
 
     // Generar un tiempo aleatorio único para este carrusel (entre 3000ms y 5000ms)
-    const randomInterval = Math.floor(Math.random() * (5000 - 3000 + 1)) + 3000;
+    const randomInterval = Math.floor(Math.random() * (15000 - 6000 + 1)) + 6000;
 
     function moveCarousel() {
         currentIndex++;
