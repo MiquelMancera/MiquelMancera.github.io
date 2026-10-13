@@ -130,7 +130,7 @@ body {
 }
 
 .main-content.active{
-  background-color: rgba(255, 255, 255, 0.25);
+  background-color: rgb(153 153 153 / 40%);
   transition: background-color 0.35s ease;
 }
 

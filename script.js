@@ -2,7 +2,7 @@
 // 1. CONFIGURACIÓN Y CARGA DE IMÁGENES (img/) [Las imagenes se cargan en el orden que se especifique en la Array]
 // ==========================================
 const galleriesConfig = {
-  gallery: ['photo1', 'photo2', 'photo5', 'photo3', 'photo8', 'photo4', 'photo6', 'photo7'],
+  gallery: ['photo1', 'photo2', 'photo4', 'photo5', 'photo6', 'photo7', 'photo8', 'photo9', 'photo10', 'photo11', 'photo12', 'photo13', 'photo14', 'photo15', 'photo16', 'photo17', 'photo18'],
   intro: ['title']
 };
 
@@ -57,7 +57,8 @@ function initNavigation() {
       link.classList.add('active');
 
       currentSection.classList.add('fade-out-up');
-
+      mainContent.classList.add('active');
+      
       setTimeout(() => {
         currentSection.classList.remove('active', 'fade-out-up');
         currentSection.style.display = 'none';
@@ -68,7 +69,6 @@ function initNavigation() {
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
             nextSection.classList.add('active');
-            mainContent.classList.add('active');
             setTimeout(() => {
               isAnimating = false;
             }, 350);
